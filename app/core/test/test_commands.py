@@ -14,6 +14,14 @@ from django.test import SimpleTestCase
 class CommandTests(SimpleTestCase):
     """Test commands."""
 
+    # django.test.testcases.DatabaseOperationForbidden: Database queries
+    # to 'default' are not allowed in SimpleTestCase subclasses
+    # add 'default' to core.tests.test_commands.CommandTest.databases to
+    # silence this failure.
+    # we are using the database in the command to wait_for_db to check
+    # that it is connecte, this is why we have to silence it here
+    databases = ['default']
+
     def test_wait_for_db_ready(self, patched_check):
         """Test waiting for database if database ready."""
         patched_check.return_value = True
